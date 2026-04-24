@@ -1,42 +1,63 @@
-AWS Serverless Image Processing System
-An event-driven serverless application that ingests image data, processes it automatically, and exposes it through REST APIs using AWS services.
+# Task 2 - AWS Serverless Image Processing System
 
-AWS Services Used
+##  Overview
 
-API Gateway - REST API endpoints
-Lambda - Serverless processing logic
-DynamoDB - Image metadata storage
-DynamoDB Streams - Event-driven trigger
-S3 - Image file storage
-IAM - Permissions and roles
+This project is an event-driven serverless application that automatically processes images using AWS services. It enables image upload, triggers processing, stores metadata, and provides access through APIs.
+
+##  Key Features
+
+* Upload images via API
+* Automatic image processing using AWS Lambda
+* Store image metadata in DynamoDB
+* Event-driven workflow using S3 triggers
+* REST API exposure using API Gateway
+* Scalable and serverless architecture
+
+##  Architecture
+
+API Gateway → Lambda (Ingest) → S3 → Lambda (Process) → DynamoDB
+
+## AWS Services Used
+
+* API Gateway
+* AWS Lambda
+* Amazon S3
+* DynamoDB
+* IAM
 
 
-How It Works
+## Workflow
 
-User calls the POST /image_url API
-Lambda fetches image data and stores it in DynamoDB
-DynamoDB Stream automatically triggers the Process Lambda
-Process Lambda downloads the image and uploads it to S3
-User calls GET /get-image API with image name
-Lambda returns a pre-signed S3 URL and last modified timestamp
-
-Implementation
-Manual Implementation
-Resources created manually via AWS Console including S3 bucket, DynamoDB table with Streams enabled, three Lambda functions, and API Gateway routes.
-Terraform Implementation
-All the same resources automated using Terraform for reproducible deployments. Run terraform apply to create and terraform destroy to clean up.
+1. User uploads image via API Gateway
+2. Lambda function stores image in S3
+3. S3 triggers another Lambda function
+4. Image is processed (resize/metadata extraction)
+5. Data is stored in DynamoDB
+6. API can be used to retrieve image details
 
 
-API Endpoints
-POST /image_url
-Fetches image data from an external source and stores it in DynamoDB.
-GET /get-image
-Takes image_name as input and returns a pre-signed S3 URL along with the last modified timestamp.
+## APIs
 
-Key Design Decisions
+* POST /upload → Upload image
+* GET /images → Get all images
+* GET /images/{id} → Get specific image
 
-Pre-signed URLs are used for secure temporary access to the private S3 bucket
-DynamoDB Streams enables fully event-driven architecture with no manual polling
-Each Lambda has proper error handling with specific error codes
-Terraform automates all infrastructure for clean and repeatable deployments
+## Infrastructure
+
+* Infrastructure as Code using Terraform
+* IAM roles for secure access
+* Event-driven triggers configured
+
+## Output
+
+* Processed images stored in S3
+* Metadata stored in DynamoDB
+
+## Use Cases
+
+* Image hosting platforms
+* Media processing pipelines
+* Automated content systems
+
+
 
